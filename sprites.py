@@ -24,7 +24,6 @@ class Enemy(pygame.sprite.Sprite):
         global SCORE
         self.rect.move_ip(0, SPEED)
         if self.rect.bottom > 600:
-            SCORE += 1
             self.rect.top = 0
             self.rect.center = (random.randint(40, WIDTH - 40), 0)
             
@@ -44,3 +43,11 @@ class Player(pygame.sprite.Sprite):
         if self.rect.right < WIDTH - 20:
             if pressed_keys[K_RIGHT]:
                 self.rect.move_ip(5, 0)
+
+class Coin(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.image.load("assets/Coin.png")
+        self.rect = self.image.get_rect()
+        self.rect.center = (random.randint(40, WIDTH - 40), 500)       
+        

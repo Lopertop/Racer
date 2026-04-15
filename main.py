@@ -1,5 +1,5 @@
 import pygame 
-import time
+import time, random
 import sys
 from pygame.locals import *
 import sprites
@@ -23,9 +23,12 @@ def main():
             
     P1 = sprites.Player()
     E1 = sprites.Enemy()
+    C = sprites.Coin()
 
     enemies = pygame.sprite.Group()
+    coins = pygame.sprite.Group()
     enemies.add(E1)
+    coins.add(C)
     all_sprites = pygame.sprite.Group()
     all_sprites.add(P1)
     all_sprites.add(E1)
@@ -50,6 +53,9 @@ def main():
             SCREEN.blit(entity.image, entity.rect)
             entity.move()
             
+        for coin in coins:
+            SCREEN.blit(coin.image, coin.rect)
+            
         if pygame.sprite.spritecollideany(P1, enemies):
             pygame.mixer.Sound('assets/accident.mp3').play()
             time.sleep(0.5)
@@ -64,9 +70,19 @@ def main():
             time.sleep(2)
             pygame.quit()
             sys.exit()
+            
+        if pygame.sprite.spritecollideany(P1, coins):
+            sprites.SCORE += 1
+            pygame.mixer.Sound('assets/coin_taken.wav').play()
+            for coin in coins:
+                coin.rect.center = (random.randint(40, sprites.WIDTH - 40), 500)
+
+                while pygame.sprite.collide_rect(coin, P1):
+                    coin.rect.center = (random.randint(40, sprites.WIDTH - 40), 500)
         
         pygame.display.update()
         FramePerSec.tick(FPS)
 
 if __name__ == '__main__':
     main()
+    
